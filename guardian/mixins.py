@@ -3,9 +3,8 @@ from collections.abc import Iterable
 from django.conf import settings
 from django.contrib.auth.decorators import login_required, REDIRECT_FIELD_NAME
 from django.core.exceptions import ImproperlyConfigured, PermissionDenied
-from guardian.models import UserObjectPermission
 from guardian.utils import get_40x_or_None, get_anonymous_user
-from guardian.shortcuts import get_objects_for_user
+from guardian.shortcuts import get_objects_for_user, assign_perm, remove_perm
 
 
 class LoginRequiredMixin:
@@ -213,10 +212,10 @@ class GuardianUserMixin:
         return get_anonymous_user()
 
     def add_obj_perm(self, perm, obj):
-        return UserObjectPermission.objects.assign_perm(perm, self, obj)
+        return assign_perm(perm, self, obj)
 
     def del_obj_perm(self, perm, obj):
-        return UserObjectPermission.objects.remove_perm(perm, self, obj)
+        return remove_perm(perm, self, obj)
 
 
 class PermissionListMixin:
